@@ -1,0 +1,5 @@
+name: Gist Input Filter
+type: module
+description: 'Provides the ability to embed gists from Github.'
+package: Filter
+core: '8.x'

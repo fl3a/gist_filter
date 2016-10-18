@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present a gist content.
+ *
+ * Available variables:
+ * - file:
+ *   An array containing the following:
+ *   - language: programming language.
+ *   - type: content type of the file.
+ *   - content: Contents of the file.
+ *   - raw_url: url to access the file on GitHub.
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="drupal-gist-file">
+  <pre type="{{ file.language }}">{{ file.content }}</pre>
+</div>

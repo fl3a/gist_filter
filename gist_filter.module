@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Provides the ability to embed gists from Github.
+ *
+ * This module provides an input filter to add a gist (from Github) anywhere
+ * input filters are accepted. You have the option of replacing the filter tag
+ * with a link to the gist or embedding the gist itself.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function gist_filter_theme() {
+  return array(
+    'gist_filter_code' => array(
+      'variables' => array('file' => array()),
+    ),
+  );
+}
