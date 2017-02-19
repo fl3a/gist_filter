@@ -1,0 +1,8 @@
+services:
+  gist_filter_github_client:
+    class: Drupal\gist_filter\GistFilterGitHubClient
+    arguments: ['@http_client_factory']
+
+  gist_filter_cached_github_client:
+    class: Drupal\gist_filter\GistFilterCacheDecoratorClient
+    arguments: ['@gist_filter_github_client', '@cache.default']

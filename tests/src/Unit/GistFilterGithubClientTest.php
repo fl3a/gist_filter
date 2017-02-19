@@ -9,6 +9,7 @@ namespace Drupal\Tests\gist_filter\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\gist_filter\GistFilterGitHubClient;
+use Drupal\Core\Http\ClientFactory;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
@@ -43,7 +44,15 @@ class GistFilterGitHubClientTest extends UnitTestCase {
       ->method('request')
       ->will($this->returnValue($response));
 
-    $client = new GistFilterGitHubClient($httpClient);
+    $httpClientFactory = $this->getMockBuilder('\Drupal\Core\Http\ClientFactory')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    $httpClientFactory->expects($this->once())
+      ->method('fromOptions')
+      ->will($this->returnValue($httpClient));
+
+    $client = new GistFilterGitHubClient($httpClientFactory);
     $client->getGist('foo');
 
   }
@@ -76,14 +85,13 @@ class GistFilterGitHubClientTest extends UnitTestCase {
 
   }
 
-
   /**
-   * Generates a GuzzleClient with the mocked responses.
+   * Generates a Drupal\Core\Http\ClientFactory with the mocked responses.
    *
    * @param array $responses
    *   Collection of responses returned by the client.
    *
-   * @return GuzzleClient
+   * @return \Drupal\Core\Http\ClientFactory'
    */
   protected function getHttpClient(array $responses = []) {
     if (empty($responses)) {
@@ -94,7 +102,15 @@ class GistFilterGitHubClientTest extends UnitTestCase {
     $handlerStack = HandlerStack::create($this->mock);
     $guzzle = new GuzzleClient(array('handler' => $handlerStack));
 
-    return $guzzle;
+    $httpClientFactory = $this->getMockBuilder('\Drupal\Core\Http\ClientFactory')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    $httpClientFactory->expects($this->any())
+      ->method('fromOptions')
+      ->will($this->returnValue($guzzle));
+
+    return $httpClientFactory;
   }
 
 }

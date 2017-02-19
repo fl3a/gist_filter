@@ -7,7 +7,7 @@
 
 namespace Drupal\gist_filter;
 
-use GuzzleHttp\ClientInterface;
+use Drupal\Core\Http\ClientFactory;
 use GuzzleHttp\Exception\RequestException;
 
 /**
@@ -16,11 +16,11 @@ use GuzzleHttp\Exception\RequestException;
 class GistFilterGitHubClient implements GistFilterClientInterface {
 
   /**
-   * The HTTP client to fetch the gist data with.
+   * The HTTP client to fetch the feed data with.
    *
-   * @var \GuzzleHttp\ClientInterface
+   * @var \Drupal\Core\Http\ClientFactory
    */
-  private $httpClient;
+  protected $httpClientFactory;
 
   /**
    * Constructs a GistFilterGitHubClient instance.
@@ -28,8 +28,8 @@ class GistFilterGitHubClient implements GistFilterClientInterface {
    * @param \GuzzleHttp\ClientInterface $http_client
    *   The Guzzle HTTP client.
    */
-  public function __construct(ClientInterface $http_client) {
-    $this->httpClient = $http_client;
+  public function __construct(ClientFactory $http_client) {
+    $this->httpClientFactory = $http_client;
   }
 
   /**
@@ -41,7 +41,7 @@ class GistFilterGitHubClient implements GistFilterClientInterface {
   public function getGist($id) {
     try {
       $url = 'https://api.github.com/gists/' . $id;
-      $response = $this->httpClient->request('GET', $url, array('headers' => array('Accept' => 'application/json')));
+      $response = $this->httpClientFactory->fromOptions()->request('GET', $url, array('headers' => array('Accept' => 'application/json')));
       $data = (string) $response->getBody();
     }
     catch (RequestException $e) {

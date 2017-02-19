@@ -14,8 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Drupal\gist_filter\GistFilterClientInterface;
-use Drupal\gist_filter\GistFilterGitHubClient;
-use Drupal\gist_filter\GistFilterCacheDecoratorClient;
 use Drupal\gist_filter\GitHubRequestException;
 use Drupal\Core\Routing\LinkGeneratorTrait;
 use Drupal\Core\Render\RendererInterface;
@@ -46,7 +44,7 @@ class GistFilter extends FilterBase implements ContainerFactoryPluginInterface {
   protected $renderer;
 
   /**
-   * @var GistFilterGitHubClient
+   * @var \Drupal\gist_filter\GistFilterGitHubClient
    */
   protected $gitHubClient;
 
@@ -78,7 +76,7 @@ class GistFilter extends FilterBase implements ContainerFactoryPluginInterface {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      new GistFilterCacheDecoratorClient(new GistFilterGitHubClient($container->get('http_client')), $container->get('cache.default')),
+      $container->get('gist_filter_cached_github_client'),
       $container->get('renderer'),
       $container->get('logger.factory')->get('filter')
     );
