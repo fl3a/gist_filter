@@ -114,11 +114,14 @@ class GistFilter extends FilterBase implements ContainerFactoryPluginInterface {
   /**
    * {@inheritdoc}
    */
-  public function tips($long = FALSE) {
+  public function tips($long = true) {
     $display = $this->settings['gist_filter_display_method'];
     $action = $display == 'embed' ? $this->t('embed the gist') : $this->t('create a link to the gist');
 
-    return $this->t('Use [gist:####] where #### is your gist number to %action.', array('%action' => $action));
+    $output = $this->t('Use <code>[gist:#####]</code> where <code>#####</code> is your gist number to %action', array('%action' => $action)) . '<br />';
+    $output.= $this->t('You may also include a specific file within a multi-file gist with <code>[gist:####:my_file]</code>.');
+
+    return $output;
   }
 
 
